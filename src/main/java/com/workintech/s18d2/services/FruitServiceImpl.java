@@ -1,8 +1,10 @@
 package com.workintech.s18d2.services;
 
-import com.workintech.s18d2.dao.FruitRepository;
+import com.workintech.s18d2.repository.FruitRepository;
 import com.workintech.s18d2.entity.Fruit;
+import com.workintech.s18d2.exceptions.PlantException;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,26 +22,28 @@ public class FruitServiceImpl implements FruitService {
 
     @Override
     public List<Fruit> getByPriceDesc() {
-        return List.of();
+        return fruitRepository.getByPriceDesc();
     }
 
     @Override
     public Fruit getById(long id) {
-        return null;
+        return fruitRepository.findById(id).orElseThrow(()-> new PlantException("Bu id ile kayıtlı Fruit yok: " + id, HttpStatus.NOT_FOUND));
     }
 
     @Override
     public Fruit save(Fruit fruit) {
-        return null;
+        return fruitRepository.save(fruit);
     }
 
     @Override
     public Fruit delete(long id) {
-        return null;
+        Fruit fruit = getById(id);
+        fruitRepository.delete(fruit);
+        return fruit;
     }
 
     @Override
     public List<Fruit> searchByName(String name) {
-        return List.of();
+        return fruitRepository.searchByName(name);
     }
 }
